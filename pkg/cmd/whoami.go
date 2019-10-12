@@ -19,6 +19,7 @@ type WhoAmIOptions struct {
 	configFlags *genericclioptions.ConfigFlags
 	iostreams   genericclioptions.IOStreams
 
+	args         []string
 	kubeclient   kubernetes.Interface
 	printVersion bool
 }
@@ -67,6 +68,8 @@ func NewCmdModifySecret(streams genericclioptions.IOStreams) *cobra.Command {
 
 // Complete sets all information required for updating the current context
 func (o *WhoAmIOptions) Complete(cmd *cobra.Command, args []string) error {
+	o.args = args
+
 	config, err := o.configFlags.ToRESTConfig()
 	if err != nil {
 		return err
@@ -82,6 +85,10 @@ func (o *WhoAmIOptions) Complete(cmd *cobra.Command, args []string) error {
 
 // Validate ensures that all required arguments and flag values are provided
 func (o *WhoAmIOptions) Validate() error {
+	if len(o.args) > 0 {
+		return fmt.Errorf("no arguments expected. got %d arguments", len(o.args))
+	}
+
 	return nil
 }
 
@@ -92,35 +99,46 @@ func (o *WhoAmIOptions) Run() error {
 		return err
 	}
 
-	if config.Username != "" {
-		fmt.Printf("kubecfg:basicauth:%s", config.Username)
-		return nil
-	}
-
-	if (config.CAData != nil || config.CAFile != "") && (config.CertData != nil || config.CertFile != "") {
-		fmt.Println("kubecfg:certauth:admin")
-		return nil
-	}
-
-	var token string
-	if config.BearerTokenFile != "" {
-		d, err := ioutil.ReadFile(config.BearerTokenFile)
-		if err != nil {
-			return err
-		}
-
-		token = string(d)
-	}
-
-	if config.BearerToken != "" {
-		token = config.BearerToken
-	}
-
-	username, err := k8s.WhoAmI(o.kubeclient, token)
+	c, err := config.TransportConfig()
 	if err != nil {
 		return err
 	}
 
-	fmt.Println(username)
-	return nil
+	// from vendor/k8s.io/client-go/transport/round_trippers.go:HTTPWrappersForConfig function, tokenauth has preference over basicauth
+	if c.HasTokenAuth() {
+		var token string
+		if config.BearerTokenFile != "" {
+			d, err := ioutil.ReadFile(config.BearerTokenFile)
+			if err != nil {
+				return err
+			}
+
+			token = string(d)
+		}
+
+		if config.BearerToken != "" {
+			token = config.BearerToken
+		}
+
+		username, err := k8s.WhoAmI(o.kubeclient, token)
+		if err != nil {
+			return err
+		}
+
+		fmt.Println(username)
+		return nil
+	}
+
+	if c.HasBasicAuth() {
+		fmt.Printf("kubecfg:basicauth:%s", config.Username)
+		return nil
+	}
+
+	if c.HasCertAuth() {
+		fmt.Println("kubecfg:certauth:admin")
+		return nil
+
+	}
+
+	return fmt.Errorf("could not identify auth type")
 }
