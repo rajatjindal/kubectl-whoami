@@ -14,7 +14,6 @@ jobs:
         uses: rajatjindal/krew-plugin-release@v0.0.30
         with:
           plugin-name: 'whoami'
-          upstream-krew-index-owner: 'rajatjin'
         env:
           KREW_PLUGIN_RELEASE_TOKEN: ${{ secrets.KREW_PLUGIN_RELEASE_TOKEN }}
 
