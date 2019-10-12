@@ -1,0 +1,11 @@
+[[constraint]]
+  name = "github.com/spf13/cobra"
+  version = "0.0.5"
+
+[[constraint]]
+  branch = "master"
+  name = "k8s.io/api"
+
+[prune]
+  go-tests = true
+  unused-packages = true
