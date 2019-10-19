@@ -11,7 +11,8 @@ This plugin has been tested to work with following auth types:
 
 # Usage
 
-- start the minikube cluster
+<details><summary>start the minikube cluster (skip if you are using an existing cluster </summary>
+<p>
 
 ```bash
 ➜  kubectl-whoami git:(master) minikube start
@@ -64,13 +65,18 @@ users:
   ➜  kubectl-whoami git:(master) ./kubectl-whoami 
 kubecfg:certauth:admin
 ```
+</p>
+</details>
+
 
 - Run `kubectl-whoami` with `default` context
 ```bash
 ➜  kubectl-whoami git:(master) ./kubectl-whoami --context default 
 kubecfg:basicauth:admin                                                                                       
 ```
-- Get token for a service account from the cluster and use that to authenticate
+<details><summary>Get token for a service account from the cluster and use that to authenticate</summary>
+<p>
+
 ```bash
 ➜  kubectl-whoami git:(master) kubectl get secret -n kube-system
 NAME                                             TYPE                                  DATA   AGE
@@ -127,11 +133,19 @@ type: kubernetes.io/service-account-token
 ➜  kubectl-whoami git:(master) echo ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNklpSjkuZXlKcGMzTWlPaUpyZFdKbGNtNWxkR1Z6TDNObGNuWnBZMlZoWTJOdmRXNTBJaXdpYTNWaVpYSnVaWFJsY3k1cGJ5OXpaWEoyYVdObFlXTmpiM1Z1ZEM5dVlXMWxjM0JoWTJVaU9pSnJkV0psTFhONWMzUmxiU0lzSW10MVltVnlibVYwWlhNdWFXOHZjMlZ5ZG1salpXRmpZMjkxYm5RdmMyVmpjbVYwTG01aGJXVWlPaUpyZFdKbExYQnliM2g1TFhSdmEyVnVMVGwzYkhGd0lpd2lhM1ZpWlhKdVpYUmxjeTVwYnk5elpYSjJhV05sWVdOamIzVnVkQzl6WlhKMmFXTmxMV0ZqWTI5MWJuUXVibUZ0WlNJNkltdDFZbVV0Y0hKdmVIa2lMQ0pyZFdKbGNtNWxkR1Z6TG1sdkwzTmxjblpwWTJWaFkyTnZkVzUwTDNObGNuWnBZMlV0WVdOamIzVnVkQzUxYVdRaU9pSmhZVGM1TldaaVl5MWtOekF5TFRFeFpUa3RZVE13TVMwd09EQXdNamRrWWpaalpHUWlMQ0p6ZFdJaU9pSnplWE4wWlcwNmMyVnlkbWxqWldGalkyOTFiblE2YTNWaVpTMXplWE4wWlcwNmEzVmlaUzF3Y205NGVTSjkuSXd4S2o0VUhfeldpTjlWSW9YTVhJOXlka19idHQxWUFLOFFzVkFET0Z4cmVoN01pa3BJcFNNN1NPUFdNZHN3VjZRd1FjbnZScjBGQWNmTnBVOE5VM0lrSGIybllkOFhDWm1iZDhaeEliRm1Velc1VVRjdGZpa0ZHMmxJN1V5MngwNmg3RXMzWWFyMEhuZHJaZi01UWg3cUQxQkhtUHZ5MkxxTS1vYVNHamtkLVRLd1l2T3VTb2I3OUxZczdMdGRCeFA5UGRlTXZZUDd4RklBU3VmZzczSDVERlRxV3ZYS0tDemNIZHNoUTE0QXhtR3Z2dDlreWdSeFVKSFBmNGxXbU9rTWVldjNIUHRiMDNSN19hRkx3YldnTzJnTVFQTFlyaFpEc3laYVdyUVljdnhkaFhWSXUwN0lCOGJBN1F0OExqYnllX3V6RDJJRVdQaktZYjFnQ2dR | base64 --decode
 
 eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlLXByb3h5LXRva2VuLTl3bHFwIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6Imt1YmUtcHJveHkiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJhYTc5NWZiYy1kNzAyLTExZTktYTMwMS0wODAwMjdkYjZjZGQiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06a3ViZS1wcm94eSJ9.IwxKj4UH_zWiN9VIoXMXI9ydk_btt1YAK8QsVADOFxreh7MikpIpSM7SOPWMdswV6QwQcnvRr0FAcfNpU8NU3IkHb2nYd8XCZmbd8ZxIbFmUzW5UTctfikFG2lI7Uy2x06h7Es3Yar0HndrZf-5Qh7qD1BHmPvy2LqM-oaSGjkd-TKwYvOuSob79LYs7LtdBxP9PdeMvYP7xFIASufg73H5DFTqWvXKKCzcHdshQ14AxmGvvt9kygRxUJHPf4lWmOkMeev3HPtb03R7_aFLwbWgO2gMQPLYrhZDsyZaWrQYcvxdhXVIu07IB8bA7Qt8Ljbye_uzD2IEWPjKYb1gCgQ%                  
+```
 
+</p>
+</details>
+
+- use the token at command line to get its subject
+
+```bash
 ➜  kubectl-whoami git:(master) ./kubectl-whoami --token eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlLXByb3h5LXRva2VuLTl3bHFwIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6Imt1YmUtcHJveHkiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJhYTc5NWZiYy1kNzAyLTExZTktYTMwMS0wODAwMjdkYjZjZGQiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06a3ViZS1wcm94eSJ9.IwxKj4UH_zWiN9VIoXMXI9ydk_btt1YAK8QsVADOFxreh7MikpIpSM7SOPWMdswV6QwQcnvRr0FAcfNpU8NU3IkHb2nYd8XCZmbd8ZxIbFmUzW5UTctfikFG2lI7Uy2x06h7Es3Yar0HndrZf-5Qh7qD1BHmPvy2LqM-oaSGjkd-TKwYvOuSob79LYs7LtdBxP9PdeMvYP7xFIASufg73H5DFTqWvXKKCzcHdshQ14AxmGvvt9kygRxUJHPf4lWmOkMeev3HPtb03R7_aFLwbWgO2gMQPLYrhZDsyZaWrQYcvxdhXVIu07IB8bA7Qt8Ljbye_uzD2IEWPjKYb1gCgQ
 system:serviceaccount:kube-system:kube-proxy
 ➜ 
 ```
+
 ## TODO
 
 - we want to test and add support for other auth-providers
