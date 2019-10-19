@@ -11,7 +11,7 @@ This plugin has been tested to work with following auth types:
 
 # Usage
 
-<details><summary>start the minikube cluster (skip if you are using an existing cluster </summary>
+<details><summary>start the minikube cluster (skip if you are using an existing cluster) </summary>
 <p>
 
 ```bash
@@ -69,7 +69,7 @@ kubecfg:certauth:admin
 </details>
 
 
-- Run `kubectl-whoami` with `default` context
+#### Run `kubectl-whoami` with `default` context
 ```bash
 ➜  kubectl-whoami git:(master) ./kubectl-whoami --context default 
 kubecfg:basicauth:admin                                                                                       
@@ -138,7 +138,7 @@ eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiw
 </p>
 </details>
 
-- use the token at command line to get its subject
+#### use the token at command line to get its subject
 
 ```bash
 ➜  kubectl-whoami git:(master) ./kubectl-whoami --token eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlLXByb3h5LXRva2VuLTl3bHFwIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6Imt1YmUtcHJveHkiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJhYTc5NWZiYy1kNzAyLTExZTktYTMwMS0wODAwMjdkYjZjZGQiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06a3ViZS1wcm94eSJ9.IwxKj4UH_zWiN9VIoXMXI9ydk_btt1YAK8QsVADOFxreh7MikpIpSM7SOPWMdswV6QwQcnvRr0FAcfNpU8NU3IkHb2nYd8XCZmbd8ZxIbFmUzW5UTctfikFG2lI7Uy2x06h7Es3Yar0HndrZf-5Qh7qD1BHmPvy2LqM-oaSGjkd-TKwYvOuSob79LYs7LtdBxP9PdeMvYP7xFIASufg73H5DFTqWvXKKCzcHdshQ14AxmGvvt9kygRxUJHPf4lWmOkMeev3HPtb03R7_aFLwbWgO2gMQPLYrhZDsyZaWrQYcvxdhXVIu07IB8bA7Qt8Ljbye_uzD2IEWPjKYb1gCgQ
