@@ -13,3 +13,4 @@
 kubectl-modify-secret
 *.swp
 _dist/
+kubectl-whoami
