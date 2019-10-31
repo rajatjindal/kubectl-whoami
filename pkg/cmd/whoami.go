@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/kubernetes"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
 //Version is set during build time
@@ -123,6 +124,10 @@ func (o *WhoAmIOptions) Run() error {
 		username, err := k8s.WhoAmI(o.kubeclient, token)
 		if err != nil {
 			return err
+		}
+
+		if username == "" {
+			return fmt.Errorf("failed to find subject of token. please report a ticket at https://github.com/rajatjindal/kubectl-whoami")
 		}
 
 		fmt.Println(username)
