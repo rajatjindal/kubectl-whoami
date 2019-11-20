@@ -18,7 +18,6 @@ func WhoAmI(kubeclient kubernetes.Interface, token string) (string, error) {
 	})
 
 	if err != nil {
-		fmt.Println(err.Error())
 		if k8serrors.IsForbidden(err) {
 			return getUsernameFromError(err), nil
 		}
@@ -33,7 +32,6 @@ func WhoAmI(kubeclient kubernetes.Interface, token string) (string, error) {
 }
 
 func getUsernameFromError(err error) string {
-	fmt.Println(err.Error())
 	re := regexp.MustCompile(`^.* User "(.*)" cannot .*$`)
 	return re.ReplaceAllString(err.Error(), "$1")
 }
