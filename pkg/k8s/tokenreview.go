@@ -1,6 +1,7 @@
 package k8s
 
 import (
+	"fmt"
 	"regexp"
 
 	authenticationapi "k8s.io/api/authentication/v1"
@@ -17,17 +18,22 @@ func WhoAmI(kubeclient kubernetes.Interface, token string) (string, error) {
 	})
 
 	if err != nil {
+		fmt.Println(err.Error())
 		if k8serrors.IsForbidden(err) {
 			return getUsernameFromError(err), nil
 		}
-
 		return "", err
+	}
+
+	if result.Status.Error != "" {
+		return "", fmt.Errorf(result.Status.Error)
 	}
 
 	return result.Status.User.Username, nil
 }
 
 func getUsernameFromError(err error) string {
+	fmt.Println(err.Error())
 	re := regexp.MustCompile(`^.* User "(.*)" cannot .*$`)
 	return re.ReplaceAllString(err.Error(), "$1")
 }

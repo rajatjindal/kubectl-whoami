@@ -3,7 +3,9 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
+	"strings"
 
 	"github.com/rajatjindal/kubectl-whoami/pkg/k8s"
 	"github.com/spf13/cobra"
@@ -23,6 +25,25 @@ type WhoAmIOptions struct {
 	args         []string
 	kubeclient   kubernetes.Interface
 	printVersion bool
+
+	tokenRetriever *tokenRetriever
+}
+
+// tokenRetriever helps to retrieve token
+type tokenRetriever struct {
+	rountTripper http.RoundTripper
+	token        string
+}
+
+//RoundTrip gets token
+func (t *tokenRetriever) RoundTrip(req *http.Request) (*http.Response, error) {
+	header := req.Header.Get("authorization")
+	switch {
+	case strings.HasPrefix(header, "Bearer "):
+		t.token = strings.ReplaceAll(header, "Bearer ", "")
+	}
+
+	return t.rountTripper.RoundTrip(req)
 }
 
 // NewWhoAmIOptions provides an instance of WhoAmIOptions with default values
@@ -76,6 +97,12 @@ func (o *WhoAmIOptions) Complete(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	o.tokenRetriever = &tokenRetriever{}
+	config.Wrap(func(rt http.RoundTripper) http.RoundTripper {
+		o.tokenRetriever.rountTripper = rt
+		return o.tokenRetriever
+	})
+
 	o.kubeclient, err = kubernetes.NewForConfig(config)
 	if err != nil {
 		return err
@@ -105,9 +132,9 @@ func (o *WhoAmIOptions) Run() error {
 		return err
 	}
 
+	var token string
 	// from vendor/k8s.io/client-go/transport/round_trippers.go:HTTPWrappersForConfig function, tokenauth has preference over basicauth
 	if c.HasTokenAuth() {
-		var token string
 		if config.BearerTokenFile != "" {
 			d, err := ioutil.ReadFile(config.BearerTokenFile)
 			if err != nil {
@@ -120,7 +147,16 @@ func (o *WhoAmIOptions) Run() error {
 		if config.BearerToken != "" {
 			token = config.BearerToken
 		}
+	}
 
+	if token == "" && config.AuthProvider != nil {
+		token, err = o.getToken()
+		if err != nil {
+			return err
+		}
+	}
+
+	if token != "" {
 		username, err := k8s.WhoAmI(o.kubeclient, token)
 		if err != nil {
 			return err
@@ -142,8 +178,15 @@ func (o *WhoAmIOptions) Run() error {
 	if c.HasCertAuth() {
 		fmt.Println("kubecfg:certauth:admin")
 		return nil
-
 	}
 
-	return fmt.Errorf("could not identify auth type")
+	return nil
+}
+
+func (o *WhoAmIOptions) getToken() (string, error) {
+	err := k8s.WhatCanI(o.kubeclient)
+	if err != nil {
+		return "", err
+	}
+	return o.tokenRetriever.token, nil
 }
