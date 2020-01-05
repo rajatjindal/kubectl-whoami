@@ -10,7 +10,7 @@ spec:
       matchLabels:
         os: darwin
         arch: amd64
-    {{addURIAndSha "https://github.com/rajatjindal/kubectl-whoami/releases/download/{{ .TagName }}/darwin-amd64-{{ .TagName }}.tar.gz" .TagName }}
+    {{addURIAndSha "https://github.com/rajatjindal/kubectl-whoami/releases/download/{{ .TagName }}/kubectl-whoami_{{ .TagName }}_darwin_amd64.tar.gz" .TagName }}
     files:
     - from: "*"
       to: "."
@@ -19,7 +19,7 @@ spec:
       matchLabels:
         os: linux
         arch: amd64
-    {{addURIAndSha "https://github.com/rajatjindal/kubectl-whoami/releases/download/{{ .TagName }}/linux-amd64-{{ .TagName }}.tar.gz" .TagName }}
+    {{addURIAndSha "https://github.com/rajatjindal/kubectl-whoami/releases/download/{{ .TagName }}/kubectl-whoami_{{ .TagName }}_linux_amd64.tar.gz" .TagName }}
     files:
     - from: "*"
       to: "."
