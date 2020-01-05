@@ -12,7 +12,7 @@ builds:
 
 archives:
 - builds:
-  - gh-action
+  - kubectl-whoami
   name_template: "{{ .ProjectName }}_{{ .Tag }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
   wrap_in_directory: false
   format: tar.gz
