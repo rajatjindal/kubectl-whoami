@@ -10,7 +10,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
       with:
-        path: ./src/github.com/rajatjindal/kubectl-whoami
+        path: ${{ github.workspace }}/src/github.com/rajatjindal/kubectl-whoami
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
