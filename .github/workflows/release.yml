@@ -24,7 +24,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GO111MODULE: off
-        GOPATH: ${{ github.workspace }}/src/github.com/rajatjindal/kubectl-whoami
+        GOPATH: ${{ github.workspace }}
     - name: Update new version in krew-index
       uses: rajatjindal/krew-release-bot@v0.0.21
       env:
