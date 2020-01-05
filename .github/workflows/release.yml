@@ -9,17 +9,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
+      with:
+        path: ./src/github.com/${{ github.repository }}
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
         go-version: 1.13
-    - name: Set GOPATH
-      # temporary fix
-      # see https://github.com/actions/setup-go/issues/12
-      # see https://github.com/actions/setup-go/issues/14
-      run: |
-        echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
-        echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
     - name: GoReleaser
       uses: goreleaser/goreleaser-action@v1
       with:
@@ -27,6 +22,7 @@ jobs:
         args: release --rm-dist
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GO111MODULE: off
     - name: Update new version in krew-index
       uses: rajatjindal/krew-release-bot@v0.0.21
       env:
