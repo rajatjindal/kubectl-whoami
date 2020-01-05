@@ -10,7 +10,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
       with:
-        path: /home/runner/go/src/github.com/rajatjindal/kubectl-whoami
+        path: ./src/github.com/rajatjindal/kubectl-whoami
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
@@ -20,10 +20,11 @@ jobs:
       with:
         version: latest
         args: release --rm-dist
-        workdir: /home/runner/go/src/github.com/rajatjindal/kubectl-whoami
+        workdir: ./src/github.com/rajatjindal/kubectl-whoami
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GO111MODULE: off
+        GOPATH: ./src
     - name: Update new version in krew-index
       uses: rajatjindal/krew-release-bot@v0.0.21
       env:
