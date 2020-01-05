@@ -10,7 +10,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
       with:
-        path: ./src/github.com/${{ github.repository }}
+        path: /home/runner/go/src/github.com/rajatjindal/kubectl-whoami
     - name: Setup Go
       uses: actions/setup-go@v1
       with:
@@ -20,7 +20,7 @@ jobs:
       with:
         version: latest
         args: release --rm-dist
-        workdir: ./src/github.com/${{ github.repository }}
+        workdir: /home/runner/go/src/github.com/rajatjindal/kubectl-whoami
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GO111MODULE: off
