@@ -20,7 +20,7 @@ jobs:
       with:
         version: latest
         args: release --rm-dist
-        workdir: ./src/github.com/rajatjindal/kubectl-whoami
+        workdir: ${{ github.workspace }}/src/github.com/rajatjindal/kubectl-whoami
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GO111MODULE: off
