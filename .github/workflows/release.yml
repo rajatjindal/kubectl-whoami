@@ -26,6 +26,6 @@ jobs:
         GO111MODULE: off
         GOPATH: ${{ github.workspace }}
     - name: Update new version in krew-index
-      uses: rajatjindal/krew-release-bot@v0.0.26
+      uses: rajatjindal/krew-release-bot@v0.0.27
       with:
         workdir: ${{ github.workspace }}/src/github.com/rajatjindal/kubectl-whoami
