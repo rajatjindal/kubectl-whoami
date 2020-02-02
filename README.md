@@ -8,6 +8,7 @@ This plugin has been tested to work with following auth types:
 - Cert Admin Auth
 - RBAC Token in Kubeconfig file
 - Token provided from command line using `--token` flag.
+- oidc provider
 
 # Usage
 
@@ -148,5 +149,4 @@ system:serviceaccount:kube-system:kube-proxy
 
 ## TODO
 
-- we want to test and add support for other auth-providers
 - add unit tests
