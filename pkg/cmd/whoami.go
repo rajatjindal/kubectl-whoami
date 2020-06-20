@@ -17,7 +17,7 @@ import (
 //Version is set during build time
 var Version = "unknown"
 
-//WhoAmIOptions is struct for modify secret
+//WhoAmIOptions is struct for whoami command
 type WhoAmIOptions struct {
 	configFlags *genericclioptions.ConfigFlags
 	iostreams   genericclioptions.IOStreams
@@ -54,8 +54,8 @@ func NewWhoAmIOptions(streams genericclioptions.IOStreams) *WhoAmIOptions {
 	}
 }
 
-// NewCmdModifySecret provides a cobra command wrapping WhoAmIOptions
-func NewCmdModifySecret(streams genericclioptions.IOStreams) *cobra.Command {
+// NewCmdWhoAmI provides a cobra command wrapping WhoAmIOptions
+func NewCmdWhoAmI(streams genericclioptions.IOStreams) *cobra.Command {
 	o := NewWhoAmIOptions(streams)
 
 	cmd := &cobra.Command{
@@ -120,7 +120,7 @@ func (o *WhoAmIOptions) Validate() error {
 	return nil
 }
 
-// Run fetches the given secret manifest from the cluster, decodes the payload, opens an editor to make changes, and applies the modified manifest when done
+// Run retrieves and print the subject that's currently authenticated
 func (o *WhoAmIOptions) Run() error {
 	config, err := o.configFlags.ToRESTConfig()
 	if err != nil {
