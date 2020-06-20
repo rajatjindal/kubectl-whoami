@@ -22,7 +22,7 @@ import (
 )
 
 func main() {
-	root := cmd.NewCmdModifySecret(genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr})
+	root := cmd.NewCmdWhoAmI(genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr})
 	if err := root.Execute(); err != nil {
 		os.Exit(1)
 	}
