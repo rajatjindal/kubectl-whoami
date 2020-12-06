@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"crypto/x509"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
+	"k8s.io/client-go/transport"
 )
 
 //Version is set during build time
@@ -176,7 +178,11 @@ func (o *WhoAmIOptions) Run() error {
 	}
 
 	if c.HasCertAuth() {
-		fmt.Println("kubecfg:certauth:admin")
+		cert, err := getClientCertificate(c)
+		if err != nil {
+			return err
+		}
+		fmt.Println(cert.Subject)
 		return nil
 	}
 
@@ -189,4 +195,21 @@ func (o *WhoAmIOptions) getToken() (string, error) {
 		return "", err
 	}
 	return o.tokenRetriever.token, nil
+}
+
+func getClientCertificate(c *transport.Config) (*x509.Certificate, error) {
+	tlsConfig, err := transport.TLSConfigFor(c)
+	if err != nil {
+		return nil, err
+	}
+	// GetClientCertificate has been set in transport.TLSConfigFor,
+	// so it is not nil
+	cert, err := tlsConfig.GetClientCertificate(nil)
+	if err != nil {
+		return nil, err
+	}
+	if cert.Leaf != nil {
+		return cert.Leaf, nil
+	}
+	return x509.ParseCertificate(cert.Certificate[0])
 }
