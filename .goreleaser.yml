@@ -4,6 +4,8 @@ builds:
   binary: kubectl-whoami
   env:
   - CGO_ENABLED=0
+  ldflags:
+  - "-s -w -X github.com/rajatjindal/kubectl-whoami/pkg/cmd.Version={{.Version}}"
   goos:
   - darwin
   - linux
