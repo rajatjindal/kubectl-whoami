@@ -182,7 +182,8 @@ func (o *WhoAmIOptions) Run() error {
 		if err != nil {
 			return err
 		}
-		fmt.Println(cert.Subject)
+		username := cert.Subject.CommonName
+		fmt.Println(username)
 		return nil
 	}
 
