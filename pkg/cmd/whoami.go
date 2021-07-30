@@ -180,7 +180,7 @@ func (o *WhoAmIOptions) Run() error {
 		return nil
 	}
 
-	return nil
+	return fmt.Errorf("unsupported auth mechanism. kindly report a ticket at https://github.com/rajatjindal/kubectl-whoami")
 }
 
 func (o *WhoAmIOptions) getToken() (string, error) {
