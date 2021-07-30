@@ -149,7 +149,7 @@ func (o *WhoAmIOptions) Run() error {
 		}
 	}
 
-	if token == "" && config.AuthProvider != nil {
+	if token == "" && (config.AuthProvider != nil || config.ExecProvider != nil) {
 		token, err = o.getToken()
 		if err != nil {
 			return err
@@ -180,7 +180,7 @@ func (o *WhoAmIOptions) Run() error {
 		return nil
 	}
 
-	return nil
+	return fmt.Errorf("unsupported auth mechanism. kindly report a ticket at https://github.com/rajatjindal/kubectl-whoami")
 }
 
 func (o *WhoAmIOptions) getToken() (string, error) {
