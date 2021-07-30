@@ -149,7 +149,7 @@ func (o *WhoAmIOptions) Run() error {
 		}
 	}
 
-	if token == "" && config.AuthProvider != nil {
+	if token == "" && (config.AuthProvider != nil || config.ExecProvider != nil) {
 		token, err = o.getToken()
 		if err != nil {
 			return err
