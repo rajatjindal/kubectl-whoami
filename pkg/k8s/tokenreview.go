@@ -3,6 +3,7 @@ package k8s
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	authenticationapi "k8s.io/api/authentication/v1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
@@ -27,8 +28,10 @@ func WhoAmI(kubeclient kubernetes.Interface, token string) (string, error) {
 	if result.Status.Error != "" {
 		return "", fmt.Errorf(result.Status.Error)
 	}
+	userGroupStr := fmt.Sprintf("User:\t%s\nGroups:\n\t%s", result.Status.User.Username,
+		strings.Join(result.Status.User.Groups, "\n\t"))
 
-	return result.Status.User.Username, nil
+	return userGroupStr, nil
 }
 
 func getUsernameFromError(err error) string {
