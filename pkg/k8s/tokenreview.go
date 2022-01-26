@@ -32,7 +32,7 @@ func WhoAmI(kubeclient kubernetes.Interface, token string) (string, error) {
 		strings.Join(result.Status.User.Groups, "\n\t"))
 
 	if len(result.Status.User.Extra["arn"]) > 0 {
-		userGroupStr = userGroupStr + "\n" + strings.Join(result.Status.User.Extra["arn"], "\n\t")
+		userGroupStr = userGroupStr + "\nARN:\n\t" + strings.Join(result.Status.User.Extra["arn"], "\n\t")
 	}
 
 	return userGroupStr, nil
