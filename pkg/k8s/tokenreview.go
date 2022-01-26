@@ -31,6 +31,10 @@ func WhoAmI(kubeclient kubernetes.Interface, token string) (string, error) {
 	userGroupStr := fmt.Sprintf("User:\t%s\nGroups:\n\t%s", result.Status.User.Username,
 		strings.Join(result.Status.User.Groups, "\n\t"))
 
+	if len(result.Status.User.Extra["arn"]) != 0 {
+		userGroupStr = userGroupStr + "\n" + strings.Join(result.Status.User.Extra["arn"], "\n\t")
+	}
+	
 	return userGroupStr, nil
 }
 
