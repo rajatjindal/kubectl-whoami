@@ -11,7 +11,7 @@ import (
 )
 
 //WhoAmI returns the current user/token subject
-func WhoAmI(kubeclient kubernetes.Interface, token string) (string, error) {
+func WhoAmI(kubeclient kubernetes.Interface, token string, printGroup bool) (string, error) {
 	result, err := kubeclient.AuthenticationV1().TokenReviews().Create(&authenticationapi.TokenReview{
 		Spec: authenticationapi.TokenReviewSpec{
 			Token: token,
@@ -28,11 +28,14 @@ func WhoAmI(kubeclient kubernetes.Interface, token string) (string, error) {
 	if result.Status.Error != "" {
 		return "", fmt.Errorf(result.Status.Error)
 	}
-	userGroupStr := fmt.Sprintf("User:\t%s\nGroups:\n\t%s", result.Status.User.Username,
-		strings.Join(result.Status.User.Groups, "\n\t"))
+	userGroupStr := result.Status.User.Username
 
-	if len(result.Status.User.Extra["arn"]) > 0 {
-		userGroupStr = userGroupStr + "\nARN:\n\t" + strings.Join(result.Status.User.Extra["arn"], "\n\t")
+	if printGroup {
+		userGroupStr = fmt.Sprintf("User:\t%s\nGroups:\n\t%s", result.Status.User.Username,
+			strings.Join(result.Status.User.Groups, "\n\t"))
+		if len(result.Status.User.Extra["arn"]) > 0 {
+			userGroupStr = userGroupStr + "\nARN:\n\t" + strings.Join(result.Status.User.Extra["arn"], "\n\t")
+		}
 	}
 
 	return userGroupStr, nil

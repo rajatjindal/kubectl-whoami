@@ -27,6 +27,7 @@ type WhoAmIOptions struct {
 	args         []string
 	kubeclient   kubernetes.Interface
 	printVersion bool
+	all          bool
 
 	tokenRetriever *tokenRetriever
 }
@@ -83,7 +84,7 @@ func NewCmdWhoAmI(streams genericclioptions.IOStreams) *cobra.Command {
 			return nil
 		},
 	}
-
+	cmd.Flags().BoolVar(&o.all, "all", false, "Prints information about user, groups and ARN")
 	cmd.Flags().BoolVar(&o.printVersion, "version", false, "prints version of plugin")
 	o.configFlags.AddFlags(cmd.Flags())
 
@@ -159,7 +160,7 @@ func (o *WhoAmIOptions) Run() error {
 	}
 
 	if token != "" {
-		username, err := k8s.WhoAmI(o.kubeclient, token)
+		username, err := k8s.WhoAmI(o.kubeclient, token, o.all)
 		if err != nil {
 			return err
 		}
