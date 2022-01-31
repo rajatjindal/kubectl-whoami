@@ -16,9 +16,20 @@ cd _dist/darwin-amd64/ && tar -cvzf darwin-amd64-$version.tar.gz kubectl-whoami 
 shasum -a 256 darwin-amd64-$version.tar.gz | awk '{print $1}' > sha256-darwin-amd64-$version
 cd -
 
+env GOOS=darwin  GOARCH=arm64 go build -ldflags "-w -s -X github.com/rajatjindal/kubectl-whoami/pkg/cmd.Version=$version" -o _dist/darwin-arm64/kubectl-whoami      main.go
+cp LICENSE _dist/darwin-arm64/
+cd _dist/darwin-arm64/ && tar -cvzf darwin-arm64-$version.tar.gz kubectl-whoami LICENSE
+shasum -a 256 darwin-arm64-$version.tar.gz | awk '{print $1}' > sha256-darwin-arm64-$version
+cd -
+
 env GOOS=linux   GOARCH=amd64 go build -ldflags "-w -s -X github.com/rajatjindal/kubectl-whoami/pkg/cmd.Version=$version" -o _dist/linux-amd64/kubectl-whoami       main.go
 cp LICENSE _dist/linux-amd64/
 cd _dist/linux-amd64/  && tar -cvzf linux-amd64-$version.tar.gz kubectl-whoami LICENSE
 shasum -a 256 linux-amd64-$version.tar.gz | awk '{print $1}' > sha256-linux-amd64-$version
+cd -
 
+env GOOS=linux   GOARCH=arm64 go build -ldflags "-w -s -X github.com/rajatjindal/kubectl-whoami/pkg/cmd.Version=$version" -o _dist/linux-arm64/kubectl-whoami       main.go
+cp LICENSE _dist/linux-arm64/
+cd _dist/linux-arm64/  && tar -cvzf linux-arm64-$version.tar.gz kubectl-whoami LICENSE
+shasum -a 256 linux-arm64-$version.tar.gz | awk '{print $1}' > sha256-linux-arm64-$version
 cd -
