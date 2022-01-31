@@ -75,6 +75,7 @@ kubecfg:certauth:admin
 ➜  kubectl-whoami git:(master) ./kubectl-whoami --context default 
 kubecfg:basicauth:admin                                                                                       
 ```
+
 <details><summary>Get token for a service account from the cluster and use that to authenticate</summary>
 <p>
 
@@ -145,6 +146,41 @@ eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiw
 ➜  kubectl-whoami git:(master) ./kubectl-whoami --token eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJrdWJlLXByb3h5LXRva2VuLTl3bHFwIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6Imt1YmUtcHJveHkiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiJhYTc5NWZiYy1kNzAyLTExZTktYTMwMS0wODAwMjdkYjZjZGQiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6a3ViZS1zeXN0ZW06a3ViZS1wcm94eSJ9.IwxKj4UH_zWiN9VIoXMXI9ydk_btt1YAK8QsVADOFxreh7MikpIpSM7SOPWMdswV6QwQcnvRr0FAcfNpU8NU3IkHb2nYd8XCZmbd8ZxIbFmUzW5UTctfikFG2lI7Uy2x06h7Es3Yar0HndrZf-5Qh7qD1BHmPvy2LqM-oaSGjkd-TKwYvOuSob79LYs7LtdBxP9PdeMvYP7xFIASufg73H5DFTqWvXKKCzcHdshQ14AxmGvvt9kygRxUJHPf4lWmOkMeev3HPtb03R7_aFLwbWgO2gMQPLYrhZDsyZaWrQYcvxdhXVIu07IB8bA7Qt8Ljbye_uzD2IEWPjKYb1gCgQ
 system:serviceaccount:kube-system:kube-proxy
 ➜ 
+```
+
+### Show group(s) info
+
+#### EKS:
+```bash
+➜  kubectl-whoami git:(master) ./kubectl-whoami --context eks --all 
+User:	user1
+Groups:
+	system:masters
+	system:authenticated
+ARN:
+	arn:aws:sts::<1234567890>:assumed-role/<aws-group>/user1
+```
+
+#### AKS:
+```bash
+➜  kubectl-whoami git:(master) ./kubectl-whoami --context aks --all 
+User:	user1@email.com
+Groups:
+	sdbd146d-1234-lkfg-df56-1358tdyjf234
+	ftwwf097-9845-92kj-294j-aerhg4557lmd
+	sfty0942-rlew-2345-6jdl-678647123ger
+  system:authenticated
+```
+
+#### GKE:
+```bash
+➜  kubectl-whoami git:(master) ./kubectl-whoami --context gke --all 
+User:	user1@email.com
+Groups:
+	group1@email.com
+	group2@email.com
+	group3@email.com
+	system:authenticated
 ```
 
 ## TODO
