@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -19,6 +20,8 @@ import (
 //Version is set during build time
 var Version = "unknown"
 
+const JSONFORMAT = "json"
+
 //WhoAmIOptions is struct for whoami command
 type WhoAmIOptions struct {
 	configFlags *genericclioptions.ConfigFlags
@@ -28,6 +31,7 @@ type WhoAmIOptions struct {
 	kubeclient   kubernetes.Interface
 	printVersion bool
 	all          bool
+	outputFormat string
 
 	tokenRetriever *tokenRetriever
 }
@@ -86,6 +90,7 @@ func NewCmdWhoAmI(streams genericclioptions.IOStreams) *cobra.Command {
 	}
 	cmd.Flags().BoolVar(&o.all, "all", false, "Prints information about user, groups and ARN")
 	cmd.Flags().BoolVar(&o.printVersion, "version", false, "prints version of plugin")
+	cmd.Flags().StringVarP(&o.outputFormat, "output", "o", "", "Output format. One of: json")
 	o.configFlags.AddFlags(cmd.Flags())
 
 	return cmd
@@ -160,16 +165,36 @@ func (o *WhoAmIOptions) Run() error {
 	}
 
 	if token != "" {
-		username, err := k8s.WhoAmI(o.kubeclient, token, o.all)
+		username, tokenreview, err := k8s.WhoAmI(o.kubeclient, token)
 		if err != nil {
 			return err
 		}
 
-		if username == "" {
-			return fmt.Errorf("failed to find subject of token. please report a ticket at https://github.com/rajatjindal/kubectl-whoami")
+		if o.outputFormat == JSONFORMAT {
+			if tokenreview == nil {
+				return fmt.Errorf("tokenreview did not return a status")
+			}
+			out, err := json.MarshalIndent(tokenreview, "", "  ")
+			if err != nil {
+				return fmt.Errorf("failed to marshal json from tokenreview")
+			}
+			fmt.Println(string(out))
+			return nil
+		}
+		if o.all {
+			username = fmt.Sprintf("User:\t%s\nGroups:\n\t%s", tokenreview.User.Username,
+				strings.Join(tokenreview.User.Groups, "\n\t"))
+			if len(tokenreview.User.Extra["arn"]) > 0 {
+				username = username + "\nARN:\n\t" + strings.Join(tokenreview.User.Extra["arn"], "\n\t")
+			}
 		}
 
-		fmt.Println(username)
+		if o.outputFormat != JSONFORMAT {
+			if username == "" {
+				return fmt.Errorf("failed to find subject of token. please report a ticket at https://github.com/rajatjindal/kubectl-whoami")
+			}
+			fmt.Println(username)
+		}
 		return nil
 	}
 
