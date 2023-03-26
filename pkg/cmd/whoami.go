@@ -3,7 +3,6 @@ package cmd
 import (
 	"crypto/x509"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -16,10 +15,10 @@ import (
 	"k8s.io/client-go/transport"
 )
 
-//Version is set during build time
+// Version is set during build time
 var Version = "unknown"
 
-//WhoAmIOptions is struct for whoami command
+// WhoAmIOptions is struct for whoami command
 type WhoAmIOptions struct {
 	configFlags *genericclioptions.ConfigFlags
 	iostreams   genericclioptions.IOStreams
@@ -38,7 +37,7 @@ type tokenRetriever struct {
 	token        string
 }
 
-//RoundTrip gets token
+// RoundTrip gets token
 func (t *tokenRetriever) RoundTrip(req *http.Request) (*http.Response, error) {
 	header := req.Header.Get("authorization")
 	switch {
@@ -139,7 +138,7 @@ func (o *WhoAmIOptions) Run() error {
 	// from vendor/k8s.io/client-go/transport/round_trippers.go:HTTPWrappersForConfig function, tokenauth has preference over basicauth
 	if c.HasTokenAuth() {
 		if config.BearerTokenFile != "" {
-			d, err := ioutil.ReadFile(config.BearerTokenFile)
+			d, err := os.ReadFile(config.BearerTokenFile)
 			if err != nil {
 				return err
 			}

@@ -1,22 +1,24 @@
 package k8s
 
 import (
+	"context"
 	"fmt"
 	"regexp"
 	"strings"
 
 	authenticationapi "k8s.io/api/authentication/v1"
 	k8serrors "k8s.io/apimachinery/pkg/api/errors"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
-//WhoAmI returns the current user/token subject
+// WhoAmI returns the current user/token subject
 func WhoAmI(kubeclient kubernetes.Interface, token string, printGroup bool) (string, error) {
-	result, err := kubeclient.AuthenticationV1().TokenReviews().Create(&authenticationapi.TokenReview{
+	result, err := kubeclient.AuthenticationV1().TokenReviews().Create(context.TODO(), &authenticationapi.TokenReview{
 		Spec: authenticationapi.TokenReviewSpec{
 			Token: token,
 		},
-	})
+	}, v1.CreateOptions{})
 
 	if err != nil {
 		if k8serrors.IsForbidden(err) {
