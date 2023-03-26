@@ -1,0 +1,32 @@
+name: Test Pull Request
+on: [pull_request]
+jobs:
+  TestPR:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'
+        cache: true
+
+    - name: Run unit tests
+      run: |
+        go test ./... -cover
+
+    # for certutil
+    # https://packages.ubuntu.com/xenial/libnss3-tools
+    - run: sudo apt update
+    - run: sudo apt install -y libnss3-tools
+    - run: mkdir -p ~/.pki/nssdb
+
+    - run: echo '127.0.0.1 dex-server' | sudo tee -a /etc/hosts
+
+    - run: make -C system_test -j3
+
+    - run: make -C system_test logs
+      if: always()
