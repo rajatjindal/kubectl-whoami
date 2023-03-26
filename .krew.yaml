@@ -42,6 +42,15 @@ spec:
     - from: "*"
       to: "."
     bin: kubectl-whoami
+  - selector:
+      matchLabels:
+        os: windows
+        arch: amd64
+    {{addURIAndSha "https://github.com/rajatjindal/kubectl-whoami/releases/download/{{ .TagName }}/kubectl-whoami_{{ .TagName }}_windows_amd64.tar.gz" .TagName }}
+    files:
+    - from: "*"
+      to: "."
+    bin: kubectl-whoami.exe
   shortDescription: Show the subject that's currently authenticated as.
   description: |
     This plugin show the subject that's currently authenticated as.
