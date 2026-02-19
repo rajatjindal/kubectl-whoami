@@ -42,7 +42,7 @@ test: build
 build: $(BIN_DIR)/kubectl-oidc_login $(BIN_DIR)/chromelogin
 
 $(BIN_DIR)/kubectl-oidc_login:
-	wget https://github.com/int128/kubelogin/releases/download/v1.27.0/kubelogin_linux_amd64.zip
+	wget https://github.com/int128/kubelogin/releases/download/v1.35.2/kubelogin_linux_amd64.zip
 	unzip kubelogin_linux_amd64.zip
 	mkdir -p $(BIN_DIR)
 	cp kubelogin $@

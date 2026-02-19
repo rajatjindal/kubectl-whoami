@@ -28,7 +28,7 @@ func WhoAmI(kubeclient kubernetes.Interface, token string, printGroup bool) (str
 	}
 
 	if result.Status.Error != "" {
-		return "", fmt.Errorf(result.Status.Error)
+		return "", fmt.Errorf("%s", result.Status.Error)
 	}
 	userGroupStr := result.Status.User.Username
 
